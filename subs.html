@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>サブスク整理ツール</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>サブスク整理ツール</h1>
+  <a href="index.html">← トップに戻る</a>
+</header>
+
+<main>
+  <p>あなたが毎月払っているサブスクを全部入力してください。</p>
+
+  <div class="form">
+    <div id="subs"></div>
+
+    <button onclick="addSub()">＋ サブスクを追加</button>
+    <button onclick="calcSubs()">合計を出す</button>
+  </div>
+
+  <div id="result" class="result"></div>
+</main>
+
+<script>
+function addSub() {
+  const div = document.createElement("div");
+  div.className = "item";
+
+  div.innerHTML = `
+    <input class="name" placeholder="例：Netflix">
+    <input class="price" type="number" placeholder="月額">
+    <button onclick="this.parentElement.remove()">×</button>
+  `;
+
+  document.getElementById("subs").appendChild(div);
+}
+
+function calcSubs() {
+  const prices = document.querySelectorAll(".price");
+  let total = 0;
+
+  prices.forEach(p => {
+    total += Number(p.value);
+  });
+
+  const yearly = total * 12;
+
+  let msg = `あなたのサブスク合計：¥${total.toLocaleString()} / 月`;
+  msg += `<br>年間：¥${yearly.toLocaleString()}`;
+
+  if (total > 10000) {
+    msg += "<br>⚠ サブスクにかなりお金を使っています";
+  }
+
+  document.getElementById("result").innerHTML = msg;
+}
+
+// 最初から1行表示
+addSub();
+</script>
+
+</body>
+</html>

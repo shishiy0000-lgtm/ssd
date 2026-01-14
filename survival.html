@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>給料日前の生存日数計算</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>給料日前の生存日数計算</h1>
+  <a href="index.html">← トップに戻る</a>
+</header>
+
+<main>
+  <p>今の残金で、あと何日生活できるかを計算します。</p>
+
+  <div class="form">
+    <label>現在の残金
+      <input id="money" type="number" placeholder="例：30000">
+    </label>
+
+    <label>1日の生活費
+      <input id="daily" type="number" placeholder="例：1500">
+    </label>
+
+    <button onclick="calcSurvival()">計算する</button>
+  </div>
+
+  <div id="result" class="result"></div>
+</main>
+
+<script>
+function calcSurvival() {
+  const money = Number(document.getElementById("money").value);
+  const daily = Number(document.getElementById("daily").value);
+
+  if (daily <= 0) {
+    document.getElementById("result").innerHTML = "1日の生活費を入力してください";
+    return;
+  }
+
+  const days = Math.floor(money / daily);
+
+  let msg = `あと <strong>${days}日</strong> 生活できます`;
+
+  if (days <= 3) {
+    msg += "<br>🚨 危険！かなりピンチです";
+  } else if (days <= 7) {
+    msg += "<br>⚠ 節約モードに入りましょう";
+  } else {
+    msg += "<br>😊 まだ余裕があります";
+  }
+
+  document.getElementById("result").innerHTML = msg;
+}
+</script>
+
+</body>
+</html>

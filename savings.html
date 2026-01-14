@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>貯金シミュレーター</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>貯金シミュレーター</h1>
+  <a href="index.html">← トップに戻る</a>
+</header>
+
+<main>
+  <p>目標金額まで、あとどれくらいかかるかを計算します。</p>
+
+  <div class="form">
+    <label>現在の貯金額
+      <input id="current" type="number" placeholder="例：500000">
+    </label>
+
+    <label>目標金額
+      <input id="target" type="number" placeholder="例：2000000">
+    </label>
+
+    <label>毎月の貯金額
+      <input id="monthly" type="number" placeholder="例：50000">
+    </label>
+
+    <button onclick="calcSavings()">計算する</button>
+  </div>
+
+  <div id="result" class="result"></div>
+</main>
+
+<script>
+function calcSavings() {
+  const current = Number(document.getElementById("current").value);
+  const target = Number(document.getElementById("target").value);
+  const monthly = Number(document.getElementById("monthly").value);
+
+  if (monthly <= 0) {
+    document.getElementById("result").innerHTML = "毎月の貯金額を入力してください";
+    return;
+  }
+
+  const need = target - current;
+
+  if (need <= 0) {
+    document.getElementById("result").innerHTML = "🎉 すでに目標を達成しています！";
+    return;
+  }
+
+  const months = Math.ceil(need / monthly);
+  const years = Math.floor(months / 12);
+  const rem = months % 12;
+
+  let msg = `目標までに必要な期間：${years}年${rem}ヶ月`;
+  msg += `<br>残り必要額：¥${need.toLocaleString()}`;
+
+  document.getElementById("result").innerHTML = msg;
+}
+</script>
+
+</body>
+</html>

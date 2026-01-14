@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>自由に使えるお金計算</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>自由に使えるお金計算</h1>
+  <a href="index.html">← トップに戻る</a>
+</header>
+
+<main>
+  <div class="form">
+    <label>月収（手取り）
+      <input id="income" type="number" placeholder="例：250000">
+    </label>
+
+    <h3>支出項目</h3>
+    <div id="items"></div>
+
+    <button onclick="addItem()">＋ 項目を追加</button>
+    <button onclick="calc()">計算する</button>
+  </div>
+
+  <div id="result" class="result"></div>
+
+  <div id="share" style="display:none;">
+    <p>この結果をシェア</p>
+    <button onclick="shareX()">Xでシェア</button>
+    <button onclick="shareLine()">LINEでシェア</button>
+    <button onclick="copyText()">コピー</button>
+  </div>
+</main>
+
+<script>
+function addItem() {
+  const div = document.createElement("div");
+  div.className = "item";
+
+  div.innerHTML = `
+    <input class="name" placeholder="例：家賃">
+    <input class="price" type="number" placeholder="金額">
+    <button onclick="this.parentElement.remove()">×</button>
+  `;
+
+  document.getElementById("items").appendChild(div);
+}
+
+function calc() {
+  const income = Number(document.getElementById("income").value);
+  const prices = document.querySelectorAll(".price");
+
+  let total = 0;
+  prices.forEach(p => {
+    total += Number(p.value);
+  });
+
+  const free = income - total;
+
+  let msg = `毎月自由に使えるお金：¥${free.toLocaleString()}`;
+
+  if (free < 0) {
+    msg += "<br>⚠ 収支がマイナスです";
+  } else if (free < 30000) {
+    msg += "<br>⚠ かなりギリギリです";
+  } else {
+    msg += "<br>😊 余裕があります";
+  }
+
+  document.getElementById("result").innerHTML = msg;
+  document.getElementById("share").style.display = "block";
+}
+
+function makeShareText() {
+  const result = document.getElementById("result").innerText;
+  return `【自由に使えるお金診断】\n${result}\n`;
+}
+
+function shareX() {
+  const text = makeShareText();
+  const url = location.href;
+  window.open(
+    `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+    "_blank"
+  );
+}
+
+function shareLine() {
+  const text = makeShareText();
+  const url = location.href;
+  window.open(
+    `https://social-plugins.line.me/lineit/share?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+    "_blank"
+  );
+}
+
+function copyText() {
+  const text = makeShareText();
+  navigator.clipboard.writeText(text);
+  alert("コピーしました！");
+}
+
+// 最初から1行出しておく
+addItem();
+</script>
+
+</body>
+</html>
